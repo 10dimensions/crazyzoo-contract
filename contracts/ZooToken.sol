@@ -356,7 +356,7 @@ contract CrazyZooToken is Pausable, StandardToken {
     // Forward ERC20 methods to upgraded contract if this one is deprecated
     function transfer(address _to, uint256 _value)
     public
-    override
+    override(BasicToken, ERC20Basic)
     whenNotPaused
     {
         if (deprecated) {
@@ -421,7 +421,7 @@ contract CrazyZooToken is Pausable, StandardToken {
     }
 
     // Forward ERC20 methods to upgraded contract if this one is deprecated
-    function balanceOf(address who) public view override returns (uint256) {
+    function balanceOf(address who) public view override(BasicToken, ERC20Basic) returns (uint256) {
         if (deprecated) {
             return UpgradedStandardToken(upgradedAddress).balanceOf(who);
         } else {
