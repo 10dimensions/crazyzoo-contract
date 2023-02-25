@@ -3,7 +3,7 @@
 // File: @openzeppelin/contracts/GSN/Context.sol
 
 
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.0;
 
 /*
  * @dev Provides information about the current execution context, including the
@@ -28,9 +28,7 @@ abstract contract Context {
 
 // File: @openzeppelin/contracts/token/ERC20/IERC20.sol
 
-// SPDX-License-Identifier: MIT
-
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.0;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -108,9 +106,7 @@ interface IERC20 {
 
 // File: @openzeppelin/contracts/math/SafeMath.sol
 
-// SPDX-License-Identifier: MIT
-
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.0;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -270,9 +266,7 @@ library SafeMath {
 
 // File: @openzeppelin/contracts/utils/Address.sol
 
-// SPDX-License-Identifier: MIT
-
-pragma solidity ^0.6.2;
+pragma solidity ^0.8.0;
 
 /**
  * @dev Collection of functions related to the address type
@@ -414,13 +408,7 @@ library Address {
 
 // File: contracts/child/ChildToken/UpgradeableChildERC20/ERC20.sol
 
-// SPDX-License-Identifier: MIT
-
-pragma solidity ^0.6.0;
-
-
-
-
+pragma solidity ^0.8.0;
 
 /**
  * Modified openzeppelin implemtation to add setters for name, symbol and decimals.
@@ -743,9 +731,7 @@ contract ERC20 is Context, IERC20 {
 
 // File: @openzeppelin/contracts/utils/EnumerableSet.sol
 
-// SPDX-License-Identifier: MIT
-
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.0;
 
 /**
  * @dev Library for managing
@@ -989,9 +975,7 @@ library EnumerableSet {
 
 // File: @openzeppelin/contracts/access/AccessControl.sol
 
-// SPDX-License-Identifier: MIT
-
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.0;
 
 
 
@@ -1208,7 +1192,7 @@ abstract contract AccessControl is Context {
 
 // File: contracts/common/AccessControlMixin.sol
 
-pragma solidity 0.6.6;
+pragma solidity ^0.8.0;
 
 
 contract AccessControlMixin is AccessControl {
@@ -1228,7 +1212,7 @@ contract AccessControlMixin is AccessControl {
 
 // File: contracts/child/ChildToken/IChildToken.sol
 
-pragma solidity 0.6.6;
+pragma solidity ^0.8.0;
 
 interface IChildToken {
     function deposit(address user, bytes calldata depositData) external;
@@ -1236,7 +1220,7 @@ interface IChildToken {
 
 // File: contracts/common/Initializable.sol
 
-pragma solidity 0.6.6;
+pragma solidity ^0.8.0;
 
 contract Initializable {
     bool inited = false;
@@ -1250,7 +1234,7 @@ contract Initializable {
 
 // File: contracts/common/EIP712Base.sol
 
-pragma solidity 0.6.6;
+pragma solidity ^0.8.0;
 
 
 contract EIP712Base is Initializable {
@@ -1326,7 +1310,7 @@ contract EIP712Base is Initializable {
 
 // File: contracts/common/NativeMetaTransaction.sol
 
-pragma solidity 0.6.6;
+pragma solidity ^0.8.0;
 
 
 
@@ -1432,7 +1416,7 @@ contract NativeMetaTransaction is EIP712Base {
 
 // File: contracts/ChainConstants.sol
 
-pragma solidity 0.6.6;
+pragma solidity ^0.8.0;
 
 contract ChainConstants {
     string constant public ERC712_VERSION = "1";
@@ -1446,7 +1430,7 @@ contract ChainConstants {
 
 // File: contracts/common/ContextMixin.sol
 
-pragma solidity 0.6.6;
+pragma solidity ^0.8.0;
 
 abstract contract ContextMixin {
     function msgSender()
@@ -1473,14 +1457,7 @@ abstract contract ContextMixin {
 
 // File: contracts/child/ChildToken/UpgradeableChildERC20/UChildERC20.sol
 
-pragma solidity 0.6.6;
-
-
-
-
-
-
-
+pragma solidity ^0.8.0;
 
 contract UChildERC20 is
     ERC20,

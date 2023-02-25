@@ -1535,7 +1535,7 @@ abstract contract ERC721Burnable is Context, ERC721 {
 
 // File: contracts/CrazyZooNFT.sol
 
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.0;
 
 interface IMintFeeToken {
     function transfer(address to, uint256 amount) external;
