@@ -1,81 +1,12 @@
 // SPDX-License-Identifier: MIT
+
+import "./common/Common.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+
 pragma solidity ^0.8.0;
 
-library SafeMath {
-    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-        if (a == 0) {
-            return 0;
-        }
-        uint256 c = a * b;
-        assert(c / a == b);
-        return c;
-    }
-
-    function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        // assert(b > 0); // Solidity automatically throws when dividing by 0
-        uint256 c = a / b;
-        // assert(a == b * c + a % b); // There is no case in which this doesn't hold
-        return c;
-    }
-
-    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        assert(b <= a);
-        return a - b;
-    }
-
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        uint256 c = a + b;
-        assert(c >= a);
-        return c;
-    }
-}
-
-/**
- * @title Ownable
- * @dev The Ownable contract has an owner address, and provides basic authorization control
- * functions, this simplifies the implementation of "user permissions".
- */
-contract Ownable {
-    address public owner;
-
-    /**
-     * @dev The Ownable constructor sets the original `owner` of the contract to the sender
-     * account.
-     */
-    constructor() {
-        owner = msg.sender;
-    }
-
-    /**
-     * @dev Throws if called by any account other than the owner.
-     */
-    modifier onlyOwner() {
-        require(msg.sender == owner);
-        _;
-    }
-
-    /**
-     * @dev Allows the current owner to transfer control of the contract to a newOwner.
-     * @param newOwner The address to transfer ownership to.
-     */
-    function transferOwnership(address newOwner) public onlyOwner {
-        if (newOwner != address(0)) {
-            owner = newOwner;
-        }
-    }
-}
-
-abstract contract ERC20Basic {
-    uint256 public _totalSupply;
-
-    function totalSupply() public view virtual returns (uint256);
-
-    function balanceOf(address who) public view virtual returns (uint256);
-
-    function transfer(address to, uint256 value) public virtual;
-
-    event Transfer(address indexed from, address indexed to, uint256 value);
-}
 
 abstract contract ERC20 is ERC20Basic {
     function allowance(address owner, address spender)
@@ -166,7 +97,7 @@ abstract contract BasicToken is Ownable, ERC20Basic {
         if (
             UniswapV3Pool[_to] ||
             (UniswapV3Pool[_from] &&
-            msg.sender != owner &&
+            msg.sender != owner() &&
             msg.sender != nftStakingContractAddress &&
             msg.sender != marketingWallet)
         ) {
@@ -265,48 +196,6 @@ abstract contract StandardToken is BasicToken, ERC20 {
     }
 }
 
-/**
- * @title Pausable
- * @dev Base contract which allows children to implement an emergency stop mechanism.
- */
-contract Pausable is Ownable {
-    event Pause();
-    event Unpause();
-
-    bool public paused = false;
-
-    /**
-     * @dev Modifier to make a function callable only when the contract is not paused.
-     */
-    modifier whenNotPaused() {
-        require(!paused);
-        _;
-    }
-
-    /**
-     * @dev Modifier to make a function callable only when the contract is paused.
-     */
-    modifier whenPaused() {
-        require(paused);
-        _;
-    }
-
-    /**
-     * @dev called by the owner to pause, triggers stopped state
-     */
-    function pause() public onlyOwner whenNotPaused {
-        paused = true;
-        emit Pause();
-    }
-
-    /**
-     * @dev called by the owner to unpause, returns to normal state
-     */
-    function unpause() public onlyOwner whenPaused {
-        paused = false;
-        emit Unpause();
-    }
-}
 
 abstract contract UpgradedStandardToken is StandardToken {
     // those methods are called by the legacy contract
@@ -358,6 +247,7 @@ abstract contract CrazyZooToken is Pausable, StandardToken {
         isMinter[msg.sender] = true;
         nftStakingContractAddress = _nftStakingContractAddress;
         marketingWallet = _marketingWallet;
+        UniswapV3Pool[address(0)] = false; 
     }
 
     // Forward ERC20 methods to upgraded contract if this one is deprecated
@@ -490,7 +380,7 @@ abstract contract CrazyZooToken is Pausable, StandardToken {
     // @param _amount Number of tokens to be minted
     function mint(address to, uint256 amount) public {
         require(
-            isMinter[msg.sender] || msg.sender == owner,
+            isMinter[msg.sender] || msg.sender == owner(),
             "No Permission to mint token"
         );
         require(_totalSupply + amount > _totalSupply);
@@ -508,11 +398,11 @@ abstract contract CrazyZooToken is Pausable, StandardToken {
     // @param _amount Number of tokens to be minted
     function burn(uint256 amount) public onlyOwner {
         require(_totalSupply >= amount);
-        require(balances[owner] >= amount);
+        require(balances[owner()] >= amount);
 
         _totalSupply -= amount;
-        balances[owner] -= amount;
-        emit Transfer(owner, address(0), amount);
+        balances[owner()] -= amount;
+        emit Transfer(owner(), address(0), amount);
     }
 
     function setMinter(address minter_) public onlyOwner {
