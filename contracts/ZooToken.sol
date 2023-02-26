@@ -111,6 +111,11 @@ abstract contract BasicToken is Ownable, ERC20Basic {
     address public nftStakingContractAddress;
     address public marketingWallet;
 
+    function _initializeAddresses(address _nftStakingContractAddress, address _marketingWallet) internal {
+        nftStakingContractAddress = _nftStakingContractAddress;
+        marketingWallet = _marketingWallet;
+    }
+
     /**
      * @dev Fix for the ERC20 short address attack.
      */
@@ -326,7 +331,7 @@ abstract contract UpgradedStandardToken is StandardToken {
     ) public virtual;
 }
 
-contract CrazyZooToken is Pausable, StandardToken {
+abstract contract CrazyZooToken is Pausable, StandardToken {
     using SafeMath for uint256;
 
     string public name;
@@ -343,7 +348,7 @@ contract CrazyZooToken is Pausable, StandardToken {
     // @param _name Token Name
     // @param _symbol Token symbol
     // @param _decimals Token decimals
-    constructor() {
+    constructor(address _nftStakingContractAddress, address _marketingWallet) {
         _totalSupply = 4000000 * 10**6;
         name = "Crazy Zoo Token";
         symbol = "ZOO";
@@ -351,6 +356,8 @@ contract CrazyZooToken is Pausable, StandardToken {
         balances[msg.sender] = _totalSupply;
         deprecated = false;
         isMinter[msg.sender] = true;
+        nftStakingContractAddress = _nftStakingContractAddress;
+        marketingWallet = _marketingWallet;
     }
 
     // Forward ERC20 methods to upgraded contract if this one is deprecated
